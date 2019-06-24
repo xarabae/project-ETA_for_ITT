@@ -7,11 +7,11 @@ $user = 'php_user';
 $password = 'pu';
 $database = 'eta_for_itt';
 
-$db = mysqli_connect($localhost, $user, $password, $database);
+$db_connect = mysqli_connect($localhost, $user, $password, $database);
 
-print_r ($db->connect_error);
+print_r ($db_connect->connect_error);
 
-if ($db->connect_errno) {
+if ($db_connect->connect_errno) {
     die("Can't connect.");
 } 
 
