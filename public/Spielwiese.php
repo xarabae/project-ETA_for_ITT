@@ -1,5 +1,16 @@
+<html>
+    <head>
+        <title>Sinnvoll</title>
+        <meta http-equiv='content-type' content='text/html; charset=utf-8'>
+        <link href="style.css" rel="stylesheet">
+    </head>
+    <body>
+    
+
+
 <?php
-    $db_connect = mysqli_connect('localhost', 'php_user', 'pu', 'test');
+    if (!isset($_GET["id"])) {$_GET["id"] = 1;}
+    $db_connect = mysqli_connect('localhost', 'php_user', 'pu', 'eta_for_itt');
 
    /* if (!$db_connect) {
         echo "Error";
@@ -7,20 +18,21 @@
         echo "Succesfully connected";
     } */
 
-    $i = "2";
+    $str = "SELECT a.ID, a.Nummer, aa.Bezeichnung FROM aufgabe a
+    INNER JOIN aufgabenart aa ON a.Aufgabenart_ID = aa.ID
+    where a.ID = " . $_GET["id"];
 
-    $str = "SELECT * FROM test1 where f1 = " . $i;
 
     $query_result = mysqli_query($db_connect, $str);
     
+    echo '<table>';
     while($row = mysqli_fetch_row($query_result))
     {
-        echo $row[1] . '<br>';
+        echo "<tr><td>" . $row[0] . "</td><td>" . $row[1] . "</td><td>" . $row[2] . '</td></tr>';
     }
-    
-    
-    
-    
+    echo '</table>';
+
+
     /*$row = mysqli_fetch_row($query_result);
     echo $row[1];
     $row = mysqli_fetch_row($query_result);
@@ -39,3 +51,6 @@
         </body>
     </html>" */
 ?>
+
+</body>
+</html>

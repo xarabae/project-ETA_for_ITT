@@ -1,19 +1,13 @@
 <?php
 require 'inc/db.php';
 
-$localhost = 'localhost';
-$user = 'php_user';
-$password = 'pu';
-$database = 'eta_for_itt';
+$str = "SELECT * FROM fach";
 
+$query_result = mysqli_query($db, $str);
 
-$db_connect = mysqli_connect($localhost, $user, $password, $database);
-
-    if (!$db_connect) {
-        echo "Error";
-    } else {
-        echo "Succesfully connected";
-    } 
-
+while($row = mysqli_fetch_row($query_result))
+{
+    echo $row[1] . '<br>';
+}
 
 ?>
