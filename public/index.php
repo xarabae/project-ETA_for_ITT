@@ -8,13 +8,14 @@
         <?php
         require 'inc/db.php';
 
-        if (!isset($_GET["id"])) {$_GET["id"] = 1;}
+        /* if (!isset($_GET["id"])) {$_GET["id"] = 1;}
+            WHERE aufgabe.ID = " . $_GET["id"]; */
 
         $query_string = "SELECT aufgabe.ID, aufgabe.Nummer, aufgabenart.Bezeichnung FROM aufgabe
         INNER JOIN aufgabenart ON aufgabe.Aufgabenart_ID = aufgabenart.ID
         WHERE aufgabe.ID = " . $_GET["id"];
     
-        $query_result = mysqli_query($db_connect, $query_string);
+        $query_result = mysqli_query($db_connect, $query_str);
         
         echo '<table>';
         while($row = mysqli_fetch_row($query_result))
