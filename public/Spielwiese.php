@@ -1,13 +1,10 @@
 <html>
     <head>
-        <title>Sinnvoll</title>
+        <title>Spielwiese</title>
         <meta http-equiv='content-type' content='text/html; charset=utf-8'>
         <link href="style.css" rel="stylesheet">
     </head>
     <body>
-    
-
-
 <?php
     if (!isset($_GET["id"])) {$_GET["id"] = 1;}
     $db_connect = mysqli_connect('localhost', 'php_user', 'pu', 'eta_for_itt');
@@ -51,6 +48,19 @@
         </body>
     </html>" */
 ?>
+
+<script> 
+// Accordions
+function accorfionFunction(id) {
+  var x = document.getElementById(id);
+  if (x.className.indexOf("w3-show") == -1) {
+    x.className += " w3-show";
+  } else { 
+    x.className = x.className.replace(" w3-show", "");
+  }
+}
+
+</script>
 
 </body>
 </html>

@@ -1,2 +1,40 @@
-td { border: 1px solid red;
+td { 
+    border: 1px solid white;
+    color: white;
+}
+
+body {
+    background: #303030;
+}
+
+.heading_short {
+    color: white;
+    font-family: "Trebuchet MS";
+    font-size: 70pt;
+    margin:0;
+    padding:0;
+}
+
+.heading_long {
+    color: white;
+    font-family: "Trebuchet MS";
+    font-size: 40pt;
+    margin:0;
+    padding:0;
+}
+
+
+#heading {
+    background-color: #545454;
+    height: 180px;
+}
+
+#sidebar {
+    background-color: #3C3C3C;
+    float: left;
+    width: 250px;
+}
+
+#content {
+    margin-left: 300px;
 }
