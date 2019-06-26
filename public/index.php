@@ -1,3 +1,23 @@
+<?php 
+    $cbgo = TRUE;
+   if (!isset($_POST["test"])) {$_POST["test"] = "";}
+   
+   checkboxSwitch("check");
+ 
+ function checkboxSwitch ($boxname) {
+   if (!isset($_POST[$boxname])) {
+       return FALSE;
+    } else {
+        if ($_POST[$boxname] == 0) {
+            return FALSE;
+        } else {
+            return TRUE;
+        }
+    }
+ }
+   
+?>
+
 <html>
     <head>
         <title>ETA for ITT</title>
@@ -9,23 +29,30 @@
         <div id="heading">
             <h1 class="heading_short">ETA for ITT</h1>         
             <h1 class="heading_long">Examination tasks Administration for IT trainees</h1>
+            
         </div>
         <form action="index.php" method="post">
+        <input name="test" value="<?php echo $_POST["test"]?>" type="text">
             <div id="sidebar">
                 <input id="submit" type="submit" name="submit" value="Filter">
                 <hr>
                 <button class="accordion" type="button" onclick="accordionFunction('pruefungsteil')">Prüfungsteil</button>
                 <div id="pruefungsteil" class="hide">
                     <div class="pruefungsteil">
-                        <input id="ga1" name="check_list[]" value="GA1" type="checkbox">
-                        <label>GA1</label>
+                     <?php
+                            echo "<input name='check' value='0' type='hidden'>";
+                            echo "<input name='check' value='1'";
+                                if (checkboxSwitch("check")) { echo " checked='checked'"; }
+                            echo " type='checkbox'><label>GA1</label><br>";
+                        ?>
+                        
                         <br>
-                        <input id="ga2" name="check_list[]" value="GA2" type="checkbox">
+                        <!--<input id="ga2" name="check_list[]" value="GA2" type="checkbox">
                         <label>GA2</label>
                         <br>
                         <input id="wiso" name="check_list[]" value="WISO" type="checkbox">
                         <label>WISO</label>
-                        <br>
+                        <br>-->
                     </div>
                 </div>
                 <hr>
@@ -51,7 +78,7 @@
                 <button class="accordion" type="button" onclick="accordionFunction('fach')">Fach</button>
                 <div id="fach" class="hide">
                     <div class="fach"> 
-                        <input id="ae" name="check_list[]" value="Anwendungentwicklung" type="checkbox">
+                        <input id="ae" name="ae" value="<?php echo $_POST["ae"]?>" type="checkbox">
                         <label>Anwendungsentwicklung</label>
                         <br>
                         <input id="it" name="check_list[]" value="IT-Systeme" type="checkbox">
@@ -90,22 +117,21 @@
                     </div>
                 </div>
             </div>
-            <?php 
-            if(isset($_POST['submit'])) {
-                //to run PHP script on submit
-                if(!empty($_POST['check_list'])) {
-                    // Loop to store and display values of individual checked checkbox.
-                    foreach($_POST['check_list'] as $selected){
-                        echo $selected . "</br>"; 
-                    }
-                }
-            } 
-            ?>
         </form>
         <div id="content">
             <?php
             require 'inc/db.php';
-            
+
+            if(isset($_POST['submit'])) {
+                //to run PHP script on submit
+                if(!empty($_POST['check_list'])) {
+                    // Loop to store and display values of individual checked checkbox.
+                    //foreach($_POST['check_list'] as $selected){
+                    //    echo $selected . "</br>"; 
+                   // }
+                }
+            } 
+
             /* if (!isset($_GET["id"])) {$_GET["id"] = 1;}
                 WHERE aufgabe.ID = " . $_GET["id"]; */
 
