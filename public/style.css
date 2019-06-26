@@ -1,3 +1,5 @@
+
+/* ----- elements ----- */
 td { 
     border: 1px solid white;
     color: white;
@@ -7,22 +9,76 @@ body {
     background: #303030;
 }
 
+button, #submit{
+    height: 50px;
+    width: 300px;
+    color: white;
+    background-color: #3C3C3C;
+    border: 0;
+    font-family: "Trebuchet MS";
+    font-size: 18pt;
+}
+
+button:hover {
+    background-color: #484848;
+}
+#submit:hover {
+    background-color: #484848;
+}
+
+/* ----- classes ----- */
+
 .heading_short {
     color: white;
-    font-family: "Trebuchet MS";
-    font-size: 70pt;
+    font-family: Roboto;
+    font-size: 72px;
     margin:0;
     padding:0;
 }
 
 .heading_long {
-    color: white;
-    font-family: "Trebuchet MS";
-    font-size: 40pt;
+    color: #2AD0C6;
+    font-family: Roboto;
+    font-size: 30pt;
     margin:0;
     padding:0;
+    padding-left: 0px;
 }
 
+.pruefungsteil {
+    font-family: "Trebuchet MS";
+    font-size: 14pt;
+    align-items: center
+}
+
+.pruefung {
+    font-family: "Trebuchet MS";
+    font-size: 14pt;
+    align-items: center
+}
+
+.fach {
+    font-family: "Trebuchet MS";
+    font-size: 14pt;
+    align-items: center
+}
+
+.aufgabenart {
+    font-family: "Trebuchet MS";
+    font-size: 14pt;
+    align-items: center
+}
+
+.hide {
+    display: none;
+}
+
+.show {
+    color: white;
+    display: unset !important;
+}
+
+/* ----- IDs ----- */
 
 #heading {
     background-color: #545454;
@@ -32,7 +88,7 @@ body {
 #sidebar {
     background-color: #3C3C3C;
     float: left;
-    width: 250px;
+    width: 300px;
 }
 
 #content {
