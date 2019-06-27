@@ -1,18 +1,15 @@
 
 /* ----- elements ----- */
-td { 
-    border: 1px solid white;
-    color: white;
-}
 
 body {
     background: #303030;
+    color: white;
 }
 
 button, #submit{
+    color: white;
     height: 50px;
     width: 300px;
-    color: white;
     background-color: #3C3C3C;
     border: 0;
     font-family: "Trebuchet MS";
@@ -20,16 +17,17 @@ button, #submit{
 }
 
 button:hover {
+    color: #2AD0C6;
     background-color: #484848;
 }
 #submit:hover {
+    color: #2AD0C6;
     background-color: #484848;
 }
 
 /* ----- classes ----- */
 
 .heading_short {
-    color: white;
     font-family: Roboto;
     font-size: 72px;
     margin:0;
@@ -45,28 +43,11 @@ button:hover {
     padding-left: 0px;
 }
 
-.pruefungsteil {
+.pruefungsteil, .pruefung, .fach, .aufgabenart{
     font-family: "Trebuchet MS";
     font-size: 14pt;
-    align-items: center
-}
-
-.pruefung {
-    font-family: "Trebuchet MS";
-    font-size: 14pt;
-    align-items: center
-}
-
-.fach {
-    font-family: "Trebuchet MS";
-    font-size: 14pt;
-    align-items: center
-}
-
-.aufgabenart {
-    font-family: "Trebuchet MS";
-    font-size: 14pt;
-    align-items: center
+    margin-bottom: 20px;
+    margin-left: 20px;
 }
 
 .hide {
@@ -74,7 +55,6 @@ button:hover {
 }
 
 .show {
-    color: white;
     display: unset !important;
 }
 
@@ -92,5 +72,29 @@ button:hover {
 }
 
 #content {
-    margin-left: 300px;
+    margin-left: 350px;
+    font-family: Roboto;
+    font-size: 30pt;
+
 }
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+td{
+    border: 2px solid #3C3C3C;
+}
+
+td, th {
+    font-size: 18pt;
+    text-align: center;
+    padding: 15px;
+}
+
+
+
+.select-selected {
+    background-color: DodgerBlue;
+  }

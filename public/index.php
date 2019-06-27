@@ -1,24 +1,78 @@
 <?php 
-    $cbgo = TRUE;
-   if (!isset($_POST["test"])) {$_POST["test"] = "";}
-   
-   checkboxSwitch("check");
- 
- function checkboxSwitch ($boxname) {
-   if (!isset($_POST[$boxname])) {
-       return FALSE;
-    } else {
-        if ($_POST[$boxname] == 0) {
-            return FALSE;
+    require 'inc/db.php';
+
+    if (!isset($_POST["test"])) {$_POST["test"] = "";}   
+
+
+    /* Aufbau der Checkboxen */
+    function buildCheckbox ($box_name, $box_label, $tabs){
+        $tabu = "\n";
+        for($i = 0; $i < $tabs; $i++){
+            $tabu .= "\t";
+        }
+        echo $tabu . "<!-- Checkbox " . $box_name . " steht auf " . switchCheckbox($box_name) . " -->";
+        echo $tabu . "<input name='" . $box_name . "' value='0' type='hidden'>";
+        echo $tabu . "<input name='" . $box_name . "' value='1' type='checkbox'";
+            if (switchCheckbox($box_name)) { echo " checked='checked'"; }
+        echo ">" . $tabu . "<label>" . $box_label . "</label><br>\n";
+    }
+    
+    /* setzt den Wert (0/1) der Checkbox und merkt sich beim filtern den angegebenen Wert */
+    function switchCheckbox ($box_name) {
+    if (!isset($_POST[$box_name])) {
+        return FALSE;
         } else {
-            return TRUE;
+            if ($_POST[$box_name] == 0) {
+                return FALSE;
+            } else {
+                return TRUE;
+            }
         }
     }
- }
-   
-?>
 
-<html>
+    /* Übergibt den $query_string an die funktion, die die Datenbank-Werte an buildCheckbox() weitergibt*/
+    function getDataForCheckbox($tabs, $query_string){
+        global $db_connect;
+        $query_result = mysqli_query($db_connect, $query_string);
+        
+        while($row = mysqli_fetch_row($query_result))
+        {
+            buildCheckbox($row[0],$row[1],$tabs);
+        }
+    }
+
+    /* Aufbau der Dropdownlisten */
+    function buildSelectOptions($div_name){
+        global $db_connect;
+        if(!isset($_POST[$div_name])){
+            $_POST[$div_name] = 0;
+        }
+
+        $query_string = "SELECT ID, concat(Halbjahr, ' ', Jahr) FROM `pruefung`";
+        $query_result = mysqli_query($db_connect, $query_string);
+
+        while($row = mysqli_fetch_row($query_result))
+        {
+            echo "\n <option value='" . $row[0] . "'";
+            if ($_POST[$div_name] == $row[0]) { echo " selected='selected'"; }
+            echo ">" . $row[1] . "</option>";
+        }
+    }
+
+    /* Aufbau $Where-String */
+    $where_string = "WHERE TRUE ";
+
+    if(switchCheckbox("pt_1")){
+        $where_string .= "AND pruefungsteil.ID = 1 ";
+    }
+    if(switchCheckbox("aa_1")){
+        $where_string .= "AND aufgabenart.ID = 1 ";
+    }
+    echo $where_string;
+
+?>
+<!DOCTYPE html>
+<html lang="de">
     <head>
         <title>ETA for ITT</title>
         <meta http-equiv='content-type' content='text/html; charset=utf-8'>
@@ -32,45 +86,31 @@
             
         </div>
         <form action="index.php" method="post">
-        <input name="test" value="<?php echo $_POST["test"]?>" type="text">
             <div id="sidebar">
                 <input id="submit" type="submit" name="submit" value="Filter">
                 <hr>
                 <button class="accordion" type="button" onclick="accordionFunction('pruefungsteil')">Prüfungsteil</button>
                 <div id="pruefungsteil" class="hide">
                     <div class="pruefungsteil">
-                     <?php
-                            echo "<input name='check' value='0' type='hidden'>";
-                            echo "<input name='check' value='1'";
-                                if (checkboxSwitch("check")) { echo " checked='checked'"; }
-                            echo " type='checkbox'><label>GA1</label><br>";
+                        <?php
+                            getDataForCheckbox(6,"SELECT concat('pt_', ID), Bezeichnung FROM pruefungsteil");
                         ?>
-                        
-                        <br>
-                        <!--<input id="ga2" name="check_list[]" value="GA2" type="checkbox">
-                        <label>GA2</label>
-                        <br>
-                        <input id="wiso" name="check_list[]" value="WISO" type="checkbox">
-                        <label>WISO</label>
-                        <br>-->
                     </div>
                 </div>
                 <hr>
                 <button class="accordion" type="button" onclick="accordionFunction('pruefung')">Prüfung</button>
                 <div id="pruefung" class="hide">
                     <div class="pruefung">
-                        <input id="one_year" name="year" type="radio">
-                        <div>
-                            <label>Jahr:</label>
-                            <select></select>
-                        </div>
-                        <input id="from_to_year" name="year" type="radio">
                         <div>
                             <label>Von:</label>
-                            <select></select>
+                            <select name="von_jahr">
+                                <?php buildSelectOptions("von_jahr");?>
+                            </select>
                             <br>
                             <label>Bis:</label>
-                            <select></select>
+                            <select name="bis_jahr">
+                                <?php buildSelectOptions("bis_jahr");?> 
+                            </select>
                         </div>                        
                     </div>
                 </div>
@@ -78,73 +118,63 @@
                 <button class="accordion" type="button" onclick="accordionFunction('fach')">Fach</button>
                 <div id="fach" class="hide">
                     <div class="fach"> 
-                        <input id="ae" name="ae" value="<?php echo $_POST["ae"]?>" type="checkbox">
-                        <label>Anwendungsentwicklung</label>
-                        <br>
-                        <input id="it" name="check_list[]" value="IT-Systeme" type="checkbox">
-                        <label>IT-Systeme</label>
-                        <br>
-                        <input id="oug" name="check_list[]" value="Organisation und Geschäftsproz." type="checkbox">
-                        <label>Organisation und Geschäftsproz.</label>
-                        <br>
-                        <input id="wug" name="check_list[]" value="Wirtschaft und Gesellschaft" type="checkbox">
-                        <label>Wirtschaft und Gesellschaft</label>
-                        <br>
+                         <?php
+                            getDataForCheckbox(6, "SELECT concat('fa_', ID), Bezeichnung FROM fach");
+                        ?>
                     </div>
                 </div>
                 <hr>
                 <button class="accordion" type="button" onclick="accordionFunction('aufgabenart')">Aufgabenart</button>
                 <div id="aufgabenart" class="hide">
                     <div class="aufgabenart">
-                        <input id="qa" name="check_list[]" value="Frage-Antwort" type="checkbox">
-                        <label>Frage-Antwort</label>
-                        <br>
-                        <input id="mc" name="check_list[]" value="Multiple Choice" type="checkbox">
-                        <label>Multiple Choice</label>
-                        <br>
-                        <input id="ass" name="check_list[]" value="Zuordnen" type="checkbox">
-                        <label>Zuordnen</label>
-                        <br>
-                        <input id="calc" name="check_list[]" value="Rechnen" type="checkbox">
-                        <label>Rechnen</label>
-                        <br>
-                        <input id="comp" name="check_list[]" value="Vervollständigen" type="checkbox">
-                        <label>Vervollständigen</label>
-                        <br>
-                        <input id="ex" name="check_list[]" value="Erläutern" type="checkbox">
-                        <label>Erläutern</label>
-                        <br>
+                        <?php
+                            getDataForCheckbox(6, "SELECT concat('aa_', ID), Bezeichnung FROM aufgabenart");
+                        ?>
                     </div>
                 </div>
             </div>
         </form>
         <div id="content">
+            <div class="ausgabe">
+                <table>
+                    <th>Prüfung</th>
+                    <th>Prüfungsteil</th>
+                    <th>Aufgabe</th>
+                    <th>Aufgabenart</th>
+                    <th>Fach</th>
+                    <th>Thema</th>
+                </table>
+            </div>
             <?php
-            require 'inc/db.php';
 
-            if(isset($_POST['submit'])) {
-                //to run PHP script on submit
-                if(!empty($_POST['check_list'])) {
-                    // Loop to store and display values of individual checked checkbox.
-                    //foreach($_POST['check_list'] as $selected){
-                    //    echo $selected . "</br>"; 
-                   // }
+                $query_string = "SELECT 
+                concat(pruefung.Halbjahr, ' ', pruefung.Jahr),
+                pruefungsteil.Bezeichnung, 
+                aufgabe.Nummer, 
+                aufgabenart.Bezeichnung,
+                fach.Bezeichnung,
+                thema.Bezeichnung
+                FROM aufgabe
+                INNER JOIN pruefungsteil ON aufgabe.Pruefungsteil_ID = pruefungsteil.ID
+                INNER JOIN aufgabenart ON aufgabe.Aufgabenart_ID = aufgabenart.ID
+                INNER JOIN pruefung ON aufgabe.Pruefungs_ID = pruefung.ID
+                INNER JOIN thema ON aufgabe.Thema_ID = thema.ID
+                INNER JOIN fach ON thema.Fach_ID = fach.ID " 
+                . $where_string;
+
+                $query_result = mysqli_query($db_connect, $query_string);
+                echo '<table>';
+                while($row = mysqli_fetch_row($query_result))
+                {
+                    echo "<tr><td>" . $row[0] . 
+                    "</td><td>" . $row[1] . 
+                    "</td><td>" . $row[2] . 
+                    "</td><td>" . $row[3] .
+                    "</td><td>" . $row[4] .
+                    "</td><td>" . $row[5] .
+                    '</td></tr>';
                 }
-            } 
-
-            /* if (!isset($_GET["id"])) {$_GET["id"] = 1;}
-                WHERE aufgabe.ID = " . $_GET["id"]; */
-
-            $query_string = "SELECT aufgabe.Nummer FROM aufgabe";
-        
-            $query_result = mysqli_query($db_connect, $query_string);
-            
-            echo '<table>';
-            while($row = mysqli_fetch_row($query_result))
-            {
-                echo "<tr><td>" . $row[0] . '</td></tr>';
-            }
-            echo '</table>';
+                echo '</table>';
             ?>
         </div>
     </body>
