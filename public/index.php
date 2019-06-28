@@ -12,7 +12,8 @@
         }
         echo $tabu . "<!-- Checkbox " . $box_name . " steht auf " . switchCheckbox($box_name) . " -->";
         echo $tabu . "<input name='" . $box_name . "' value='0' type='hidden'>";
-        echo $tabu . "<input name='" . $box_name . "' value='1' type='checkbox'";
+        echo $tabu . "<input name='" . $box_name . "' value='1' type='checkbox' onchange='document.getElementById(".'"filter"'.").click()'";
+        
             if (switchCheckbox($box_name)) { echo " checked='checked'"; }
         echo ">" . $tabu . "<label>" . $box_label . "</label><br>\n";
     }
@@ -60,13 +61,68 @@
     }
 
     /* Aufbau $Where-String */
-    $where_string = "WHERE TRUE ";
+    $where_string = "";
 
-    if(switchCheckbox("pt_1")){
-        $where_string .= "AND pruefungsteil.ID = 1 ";
+    /* Dynamische Where-String für Prüfungsteil */
+    $query_string = "SELECT concat('pt_', ID), ID FROM pruefungsteil";
+    $query_result = mysqli_query($db_connect, $query_string);
+
+    while($row = mysqli_fetch_row($query_result))
+    {
+        if(switchCheckbox($row[0])){
+            if($where_string == ""){
+                $where_string = "WHERE (pruefungsteil.ID = " . $row[1];
+            } else {
+                $where_string .= " OR pruefungsteil.ID = " . $row[1];
+            }
+        }
     }
-    if(switchCheckbox("aa_1")){
-        $where_string .= "AND aufgabenart.ID = 1 ";
+    if($where_string != "") {
+        $where_string .= ")";
+    }
+
+    /* Dynamische Where-String für Fach */
+    $query_string = "SELECT concat('fa_', ID), ID FROM fach";
+    $query_result = mysqli_query($db_connect, $query_string);
+
+    while($row = mysqli_fetch_row($query_result))
+    {
+        if(switchCheckbox($row[0])){
+            if($where_string == ""){
+                $where_string = "WHERE (fach.ID = " . $row[1];
+            } else {
+                if(substr($where_string, -1) == ")"){
+                    $where_string .= " AND (fach.ID = " . $row[1];
+                } else {
+                    $where_string .= " OR fach.ID = " . $row[1];
+                }
+            }
+        }
+    }
+    if($where_string != "" && substr($where_string, -1) != ")") {
+        $where_string .= ")";
+    }
+
+    /* Dynamische Where-String für Aufgabenart */
+    $query_string = "SELECT concat('aa_', ID), ID FROM aufgabenart";
+    $query_result = mysqli_query($db_connect, $query_string);
+
+    while($row = mysqli_fetch_row($query_result))
+    {
+        if(switchCheckbox($row[0])){
+            if($where_string == ""){
+                $where_string = "WHERE (aufgabenart.ID = " . $row[1];
+            } else {
+                if(substr($where_string, -1) == ")"){
+                    $where_string .= " AND (aufgabenart.ID = " . $row[1];
+                } else {
+                    $where_string .= " OR aufgabenart.ID = " . $row[1];
+                }
+            }
+        }
+    }
+    if($where_string != "" && substr($where_string, -1) != ")") {
+        $where_string .= ")";
     }
     echo $where_string;
 
@@ -87,7 +143,7 @@
         </div>
         <form action="index.php" method="post">
             <div id="sidebar">
-                <input id="submit" type="submit" name="submit" value="Filter">
+                <input id="filter" type="submit" name="submit" value="Filter">
                 <hr>
                 <button class="accordion" type="button" onclick="accordionFunction('pruefungsteil')">Prüfungsteil</button>
                 <div id="pruefungsteil" class="hide">
@@ -136,14 +192,7 @@
         </form>
         <div id="content">
             <div class="ausgabe">
-                <table>
-                    <th>Prüfung</th>
-                    <th>Prüfungsteil</th>
-                    <th>Aufgabe</th>
-                    <th>Aufgabenart</th>
-                    <th>Fach</th>
-                    <th>Thema</th>
-                </table>
+
             </div>
             <?php
 
@@ -163,7 +212,13 @@
                 . $where_string;
 
                 $query_result = mysqli_query($db_connect, $query_string);
-                echo '<table>';
+                echo "<table>
+                <th id='upperleftcorner'>Prüfung</th>
+                <th>Prüfungsteil</th>
+                <th>Aufgabe</th>
+                <th>Aufgabenart</th>
+                <th>Fach</th>
+                <th id='upperrightcorner'>Thema</th>";
                 while($row = mysqli_fetch_row($query_result))
                 {
                     echo "<tr><td>" . $row[0] . 

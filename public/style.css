@@ -6,7 +6,7 @@ body {
     color: white;
 }
 
-button, #submit{
+button, #filter{
     color: white;
     height: 50px;
     width: 300px;
@@ -20,9 +20,8 @@ button:hover {
     color: #2AD0C6;
     background-color: #484848;
 }
-#submit:hover {
-    color: #2AD0C6;
-    background-color: #484848;
+#filter {
+    display: none;
 }
 
 /* ----- classes ----- */
@@ -73,14 +72,28 @@ button:hover {
 
 #content {
     margin-left: 350px;
+    margin-right: 50px;
+    margin-top: 50px;
     font-family: Roboto;
     font-size: 30pt;
+}
 
+#upperleftcorner {
+    border-top-left-radius: 20px;
+}
+#upperrightcorner {
+    border-top-right-radius: 20px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
+
+    font-family: Roboto;
+}
+
+th {
+    background-color: #3C3C3C;
 }
 
 td{
@@ -92,9 +105,3 @@ td, th {
     text-align: center;
     padding: 15px;
 }
-
-
-
-.select-selected {
-    background-color: DodgerBlue;
-  }
