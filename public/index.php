@@ -124,8 +124,6 @@
     if($where_string != "" && substr($where_string, -1) != ")") {
         $where_string .= ")";
     }
-    echo $where_string;
-
 ?>
 <!DOCTYPE html>
 <html lang="de">
@@ -158,16 +156,16 @@
                 <div id="pruefung" class="hide">
                     <div class="pruefung">
                         <div>
-                            <label>Von:</label>
+                            <label class="labels">Von:</label>
                             <select name="von_jahr">
                                 <?php buildSelectOptions("von_jahr");?>
                             </select>
                             <br>
-                            <label>Bis:</label>
+                            <label class="labels">Bis:</label>
                             <select name="bis_jahr">
                                 <?php buildSelectOptions("bis_jahr");?> 
                             </select>
-                        </div>                        
+                        </div>
                     </div>
                 </div>
                 <hr>
@@ -192,45 +190,45 @@
         </form>
         <div id="content">
             <div class="ausgabe">
+                <?php
+                    echo "<h3 id='where_string'>Where-String: " . $where_string . "</h3>";
+                    
+                    $query_string = "SELECT 
+                    concat(pruefung.Halbjahr, ' ', pruefung.Jahr),
+                    pruefungsteil.Bezeichnung, 
+                    aufgabe.Nummer, 
+                    aufgabenart.Bezeichnung,
+                    fach.Bezeichnung,
+                    thema.Bezeichnung
+                    FROM aufgabe
+                    INNER JOIN pruefungsteil ON aufgabe.Pruefungsteil_ID = pruefungsteil.ID
+                    INNER JOIN aufgabenart ON aufgabe.Aufgabenart_ID = aufgabenart.ID
+                    INNER JOIN pruefung ON aufgabe.Pruefungs_ID = pruefung.ID
+                    INNER JOIN thema ON aufgabe.Thema_ID = thema.ID
+                    INNER JOIN fach ON thema.Fach_ID = fach.ID " 
+                    . $where_string;
 
+                    $query_result = mysqli_query($db_connect, $query_string);
+                    echo "<table>
+                    <th id='upperleftcorner'>Prüfung</th>
+                    <th>Prüfungsteil</th>
+                    <th>Aufgabe</th>
+                    <th>Aufgabenart</th>
+                    <th>Fach</th>
+                    <th id='upperrightcorner'>Thema</th>";
+                    while($row = mysqli_fetch_row($query_result))
+                    {
+                        echo "<tr><td>" . $row[0] . 
+                        "</td><td>" . $row[1] . 
+                        "</td><td>" . $row[2] . 
+                        "</td><td>" . $row[3] .
+                        "</td><td>" . $row[4] .
+                        "</td><td>" . $row[5] .
+                        '</td></tr>';
+                    }
+                    echo '</table>';
+                ?>
             </div>
-            <?php
-
-                $query_string = "SELECT 
-                concat(pruefung.Halbjahr, ' ', pruefung.Jahr),
-                pruefungsteil.Bezeichnung, 
-                aufgabe.Nummer, 
-                aufgabenart.Bezeichnung,
-                fach.Bezeichnung,
-                thema.Bezeichnung
-                FROM aufgabe
-                INNER JOIN pruefungsteil ON aufgabe.Pruefungsteil_ID = pruefungsteil.ID
-                INNER JOIN aufgabenart ON aufgabe.Aufgabenart_ID = aufgabenart.ID
-                INNER JOIN pruefung ON aufgabe.Pruefungs_ID = pruefung.ID
-                INNER JOIN thema ON aufgabe.Thema_ID = thema.ID
-                INNER JOIN fach ON thema.Fach_ID = fach.ID " 
-                . $where_string;
-
-                $query_result = mysqli_query($db_connect, $query_string);
-                echo "<table>
-                <th id='upperleftcorner'>Prüfung</th>
-                <th>Prüfungsteil</th>
-                <th>Aufgabe</th>
-                <th>Aufgabenart</th>
-                <th>Fach</th>
-                <th id='upperrightcorner'>Thema</th>";
-                while($row = mysqli_fetch_row($query_result))
-                {
-                    echo "<tr><td>" . $row[0] . 
-                    "</td><td>" . $row[1] . 
-                    "</td><td>" . $row[2] . 
-                    "</td><td>" . $row[3] .
-                    "</td><td>" . $row[4] .
-                    "</td><td>" . $row[5] .
-                    '</td></tr>';
-                }
-                echo '</table>';
-            ?>
         </div>
     </body>
 </html> 
