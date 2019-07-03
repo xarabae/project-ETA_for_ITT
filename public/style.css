@@ -75,7 +75,7 @@ button:hover {
     margin-right: 50px;
     margin-top: 50px;
     font-family: Roboto;
-    font-size: 30pt;
+    font-size: 15pt;
 }
 
 #upperleftcorner {
@@ -85,10 +85,14 @@ button:hover {
     border-top-right-radius: 20px;
 }
 
+#where_string {
+    color: #2AD0C6;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
-
+    margin-top: 10px;
     font-family: Roboto;
 }
 
@@ -104,4 +108,15 @@ td, th {
     font-size: 18pt;
     text-align: center;
     padding: 15px;
+}
+
+select {
+    text-align: center;
+    height: 30px;
+    width: 200px;
+    background-color: #3C3C3C;
+    color: white;
+    font-size: 14pt;
+    border-radius: 5px;
+    border-color: transparent;
 }
