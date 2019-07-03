@@ -83,15 +83,15 @@
 
     /* Dynamische Where-String für Prüfung */
   //  while($row = mysqli_fetch_row($query_result)){
-        if(isset($_POST['von_jahr'])){
+        if(isset($_POST['jahr'])){
            
             if($where_string == ""){
-                $where_string = "WHERE (prüfung.ID >= " .  $_POST['von_jahr'];
+                $where_string = "WHERE (pruefung.ID = " .  $_POST['jahr'];
             } else {
                 if(substr($where_string, -1) == ")"){
-                    $where_string .= " AND (prüfung.ID >= " .  $_POST['von_jahr'];
+                    $where_string .= " AND (pruefung.ID = " .  $_POST['jahr'];
                 } else {
-                    $where_string .= " OR prüfung.ID >= " .  $_POST['von_jahr'];
+                    $where_string .= " OR pruefung.ID = " .  $_POST['jahr'];
                 }
             }
         }
@@ -99,26 +99,6 @@
     if($where_string != "" && substr($where_string, -1) != ")") {
          $where_string .= ")";
     }
-
-    /* Dynamische Where-String für Prüfung */
-  //  while($row = mysqli_fetch_row($query_result)){
-    if(isset($_POST['bis_jahr'])){
-           
-        if($where_string == ""){
-            $where_string = "WHERE (prüfung.ID <= " .  $_POST['bis_jahr'];
-        } else {
-            if(substr($where_string, -1) == ")"){
-                $where_string .= " AND (prüfung.ID <= " .  $_POST['bis_jahr'];
-            } else {
-                $where_string .= " OR prüfung.ID <= " .  $_POST['bis_jahr'];
-            }
-        }
-    }
-//}
-if($where_string != "" && substr($where_string, -1) != ")") {
-     $where_string .= ")";
-}
-
 
     /* Dynamische Where-String für Fach */
     $query_string = "SELECT concat('fa_', ID), ID FROM fach";
@@ -196,14 +176,10 @@ if($where_string != "" && substr($where_string, -1) != ")") {
                     <div class="pruefung">
                         <div>
                             <label class="labels">Von:</label>
-                            <select name="von_jahr" onchange='document.getElementById("filter").click()'>
-                                <?php buildSelectOptions("von_jahr");?>
+                            <select name="jahr" onchange='document.getElementById("filter").click()'>
+                                <?php buildSelectOptions("jahr");?>
                             </select>
                             <br>
-                            <label class="labels">Bis:</label>
-                            <select name="bis_jahr" onchange='document.getElementById("filter").click()'>
-                                <?php buildSelectOptions("bis_jahr");?> 
-                            </select>
                         </div>
                     </div>
                 </div>
@@ -255,15 +231,17 @@ if($where_string != "" && substr($where_string, -1) != ")") {
                     <th>Aufgabenart</th>
                     <th>Fach</th>
                     <th id='upperrightcorner'>Thema</th>";
-                    while($row = mysqli_fetch_row($query_result))
-                    {
-                        echo "<tr><td>" . $row[0] . 
-                        "</td><td>" . $row[1] . 
-                        "</td><td>" . $row[2] . 
-                        "</td><td>" . $row[3] .
-                        "</td><td>" . $row[4] .
-                        "</td><td>" . $row[5] .
-                        '</td></tr>';
+                    if ($query_result !== FALSE){
+                        while($row = mysqli_fetch_row($query_result))
+                        {
+                            echo "<tr><td>" . $row[0] . 
+                            "</td><td>" . $row[1] . 
+                            "</td><td>" . $row[2] . 
+                            "</td><td>" . $row[3] .
+                            "</td><td>" . $row[4] .
+                            "</td><td>" . $row[5] .
+                            '</td></tr>';
+                        }
                     }
                     echo '</table>';
                 ?>
