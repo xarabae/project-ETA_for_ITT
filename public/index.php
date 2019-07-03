@@ -133,7 +133,7 @@
         <title>ETA for ITT</title>
         <meta http-equiv='content-type' content='text/html; charset=utf-8'>
         <link href="style.css" rel="stylesheet">
-        <script src="inc/main.js"></script>
+        <script src="main.js"></script>
     </head>
     <body>
         <div id="heading">
