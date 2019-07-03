@@ -81,6 +81,45 @@
         $where_string .= ")";
     }
 
+    /* Dynamische Where-String für Prüfung */
+  //  while($row = mysqli_fetch_row($query_result)){
+        if(isset($_POST['von_jahr'])){
+           
+            if($where_string == ""){
+                $where_string = "WHERE (prüfung.ID >= " .  $_POST['von_jahr'];
+            } else {
+                if(substr($where_string, -1) == ")"){
+                    $where_string .= " AND (prüfung.ID >= " .  $_POST['von_jahr'];
+                } else {
+                    $where_string .= " OR prüfung.ID >= " .  $_POST['von_jahr'];
+                }
+            }
+        }
+    //}
+    if($where_string != "" && substr($where_string, -1) != ")") {
+         $where_string .= ")";
+    }
+
+    /* Dynamische Where-String für Prüfung */
+  //  while($row = mysqli_fetch_row($query_result)){
+    if(isset($_POST['bis_jahr'])){
+           
+        if($where_string == ""){
+            $where_string = "WHERE (prüfung.ID <= " .  $_POST['bis_jahr'];
+        } else {
+            if(substr($where_string, -1) == ")"){
+                $where_string .= " AND (prüfung.ID <= " .  $_POST['bis_jahr'];
+            } else {
+                $where_string .= " OR prüfung.ID <= " .  $_POST['bis_jahr'];
+            }
+        }
+    }
+//}
+if($where_string != "" && substr($where_string, -1) != ")") {
+     $where_string .= ")";
+}
+
+
     /* Dynamische Where-String für Fach */
     $query_string = "SELECT concat('fa_', ID), ID FROM fach";
     $query_result = mysqli_query($db_connect, $query_string);
@@ -157,12 +196,12 @@
                     <div class="pruefung">
                         <div>
                             <label class="labels">Von:</label>
-                            <select name="von_jahr">
+                            <select name="von_jahr" onchange='document.getElementById("filter").click()'>
                                 <?php buildSelectOptions("von_jahr");?>
                             </select>
                             <br>
                             <label class="labels">Bis:</label>
-                            <select name="bis_jahr">
+                            <select name="bis_jahr" onchange='document.getElementById("filter").click()'>
                                 <?php buildSelectOptions("bis_jahr");?> 
                             </select>
                         </div>
