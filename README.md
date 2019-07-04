@@ -20,4 +20,4 @@ Examination tasks Administration for IT trainees.
 
 - test connection 
     - type localhost in your browser and go
-        - if it doesnt work start from th beginning
+        - if it doesnt work start from the beginning
