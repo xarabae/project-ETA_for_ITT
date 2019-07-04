@@ -23,11 +23,7 @@
     if (!isset($_POST[$box_name])) {
         return FALSE;
         } else {
-            if ($_POST[$box_name] == 0) {
-                return FALSE;
-            } else {
-                return TRUE;
-            }
+            return ($_POST[$box_name] != 0);
         }
     }
 
