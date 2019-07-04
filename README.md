@@ -16,7 +16,9 @@ Examination tasks Administration for IT trainees.
 	- start phpmyadmin (by clicking the admin button of mysql)
 		- create new database 'eta_for_itt'
 		- import dump
-		- create user = 'php_user'; pw = 'pu' 
+		- create user = 'php_user'; pw = 'pu'
+		- only for 'Lokal' not '%'
+		- only grant rights for 'Data'
 
 - test connection 
     - type localhost in your browser and go
