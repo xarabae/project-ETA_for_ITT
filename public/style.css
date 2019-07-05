@@ -31,6 +31,7 @@ button:hover {
     font-size: 72px;
     margin:0;
     padding:0;
+    padding-left: 10px;
 }
 
 .heading_long {
@@ -39,7 +40,7 @@ button:hover {
     font-size: 30pt;
     margin:0;
     padding:0;
-    padding-left: 0px;
+    padding-left: 10px;
 }
 
 .pruefungsteil, .pruefung, .fach, .aufgabenart{
